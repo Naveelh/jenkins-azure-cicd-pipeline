@@ -31,6 +31,28 @@ pipeline {
 				sh "mvn failsafe:integration-test failsafe:verify"
 			}
 		}
+		stage('Package') {
+			steps {
+				sh "mvn package -DskipTest"
+			}
+		}
+		stage('Build Docker Image') {
+			steps {
+				script {
+					dockerImage = docker.build("naveelh/currency-exchange-devops:${env.BUILD_TAG}")
+				}
+			}
+		}
+		stage('Push Docker Image') {
+			steps {
+				script {
+					docker.withRegistry('', 'docker-hub-credentials') {
+						dockerImage.push();
+						dockerImage.push('latest');
+					}
+				}
+			}
+		}
 	}
 	
 }
