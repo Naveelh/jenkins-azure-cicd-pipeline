@@ -45,7 +45,7 @@ pipeline {
 		}
 		stage('Building docker container') {
 			steps {
-				sh "docker run --detach --name currency-exchange-devops-app --publish 8000:8000 naveelh/currency-exchange-devops:${env.BUILD_TAG}"
+				sh "docker run --detach --name "${env.BUILD_NAME}:${env.BUILD_ID}" --publish 8000:8000 naveelh/currency-exchange-devops:${env.BUILD_TAG}"
 			}
 		}
 		stage('Push Docker Image') {
