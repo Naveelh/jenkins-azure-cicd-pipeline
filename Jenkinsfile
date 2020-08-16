@@ -43,7 +43,12 @@ pipeline {
 				}
 			}
 		}
-		stage('Building docker container') {
+		stage('Remove old docker container') {
+			steps {
+				sh "docker rm -f ${env.JOB_NAME}-${env.BUILD_ID}"
+			}
+		}
+		stage('Build docker container') {
 			steps {
 				sh "docker run --detach --name ${env.JOB_NAME}-${env.BUILD_ID} --publish 8000:8000 naveelh/currency-exchange-devops:${env.BUILD_TAG}"
 			}
